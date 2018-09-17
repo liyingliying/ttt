@@ -50,8 +50,7 @@ timestamp，prizeFlag，orderId，appKey，appSecret
 
 其中，appSecret为媒体秘钥（推啊后台获取路径-流量合作-我的媒体）
 
-签名算法为MD5，以下是例子：  
-
+签名算法为MD5，以下是例子：
 StringBuilder sb = new StringBuilder(); sb.append(timestamp);//时间戳 sb.append(prizeFlag);//虚拟商品标识 sb.append(orderId);//订单号 sb.append(appKey);//媒体信息
 sb.append(appSecret);//媒体密钥 try {
 return MD5.md5(sb.toString());
@@ -59,4 +58,33 @@ return MD5.md5(sb.toString());
 log.warn("虚拟商品充值签名失败 msg={}",e.getMessage(),e);
    return null;
 }
+
+
+验证请求
+请求验证分为时效性验证和签名验证，验证通过后在充值。
+时效性验证：5分钟失效 
+Date date = null; try {
+date = new Date(Long.valueOf(timestamp)); } catch (Exception e) {
+   return false;
+}
+//5 分钟失效
+return date.after(new Date(new Date().getTime()-5*60*1000L));
+
+签名验证
+StringBuilder sb = new StringBuilder(); sb.append(timestamp);//时间戳
+sb.append(prizeFlag);//虚拟商品标识 sb.append(orderId);//订单号 sb.append(appKey);//媒体信息 sb.append(appSecret);//媒体密钥 try {
+String sign = MD5.md5(sb.toString()); if(map.get("sign").equals(sign)){
+       return true;
+   }
+} catch (NoSuchAlgorithmException | UnsupportedEncodingException e) { log.warn("虚拟商品充值签名失败 msg={}",e.getMessage(),e);
+}
+return false;
+
+安全策略
+
+连续积累 300 个订单请求无响应，将停止为该媒体充值服务; 补偿策略减少无响应订单数量后，自动开启充值服务;
+
+补偿策略
+2 秒超时无响应订单，进入重试补偿机制，重试间隔策略为 30s，60s，120s， 重试次数为 3 次，否则进入人工补偿;
+
 
