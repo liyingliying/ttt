@@ -16,7 +16,7 @@
   * 常见问题
 * 下载类广告券
   * [参考文档](can-kao-wen-dang.md)
-  * 应用场景
+  * [应用场景](ying-yong-chang-jing.md)
 * iOS SDK
   * 对接文档
   * 常见问题
