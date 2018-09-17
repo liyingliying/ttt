@@ -15,7 +15,7 @@
   * [对接文档](dui-jie-wen-dang.md)
   * 常见问题
 * 下载类广告券
-  * 参考文档
+  * [参考文档](can-kao-wen-dang.md)
   * 应用场景
 * iOS SDK
   * 对接文档
