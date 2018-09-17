@@ -8,7 +8,7 @@
 
 （2）需要在广告位链接后面&userId=xxxxx
 
-  \(3\)   信息收集表（表格联系推啊运营）
+\(3\)   信息收集表（表格联系推啊运营）
 
 ![](/assets/信息收集.png)（4）表格信息填写需要的充值接口文档参考以下内容
 
@@ -34,5 +34,28 @@
 | score | Integer | 否 | 数值类型的虚拟商品，对应实际数值得100倍，媒体在充值操作时除以100 |
 | reason | String | 是 | 充值理由 |
 
+响应说明
 
+| 参数 | 类型 | 是否必须 | 解释 |
+| :--- | :--- | :--- | :--- |
+| code | String | 是 | 0：成功，-1：重填，其他：充值异常 |
+| msg | String | 是 | 充值失败信息 |
+| orderId | String | 是 | 推啊订单号 |
+
+签名说明
+
+签名源数据及顺序:
+
+timestamp，prizeFlag，orderId，appKey，appSecret
+
+其中，appSecret为媒体秘钥（推啊后台获取路径-流量合作-我的媒体）
+
+签名算法为MD5，以下是例子：  
+StringBuilder sb = new StringBuilder(); sb.append(timestamp);//时间戳 sb.append(prizeFlag);//虚拟商品标识 sb.append(orderId);//订单号 sb.append(appKey);//媒体信息
+sb.append(appSecret);//媒体密钥 try {
+return MD5.md5(sb.toString());
+} catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
+log.warn("虚拟商品充值签名失败 msg={}",e.getMessage(),e);
+   return null;
+}
 
