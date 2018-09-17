@@ -51,6 +51,7 @@ timestamp，prizeFlag，orderId，appKey，appSecret
 其中，appSecret为媒体秘钥（推啊后台获取路径-流量合作-我的媒体）
 
 签名算法为MD5，以下是例子：  
+
 StringBuilder sb = new StringBuilder(); sb.append(timestamp);//时间戳 sb.append(prizeFlag);//虚拟商品标识 sb.append(orderId);//订单号 sb.append(appKey);//媒体信息
 sb.append(appSecret);//媒体密钥 try {
 return MD5.md5(sb.toString());
